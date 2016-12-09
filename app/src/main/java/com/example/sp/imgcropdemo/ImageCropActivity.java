@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +38,7 @@ public class ImageCropActivity extends Activity implements View.OnClickListener{
         btn_save.setOnClickListener(this);
         btn_cancel.setOnClickListener(this);
         photoPath = getIntent().getStringExtra(PHOTO_PATH);
+        mBitmap = (Bitmap) getIntent().getExtras().get("data");
     }
 
     private void setPic(String photoPath){
@@ -60,11 +62,16 @@ public class ImageCropActivity extends Activity implements View.OnClickListener{
         mBitmap = bitmap;
     }
 
+    private void setPic(Bitmap bmp){
+        mImageView.setImageBitmap(bmp);
+    }
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if(hasFocus)
             setPic(photoPath);
+//        setPic(mBitmap);
     }
 
     @Override
@@ -85,6 +92,11 @@ public class ImageCropActivity extends Activity implements View.OnClickListener{
 //                intent.putExtra("bitmap",b);
 //                setResult(RESULT_OK,intent);
                 bitmap = crop_bitmap;
+//                Bundle bundle = new Bundle();
+//                bundle.putParcelable("bitmap",crop_bitmap);
+//                Intent intent = new Intent();
+//                intent.putExtras(bundle);
+//                setResult(RESULT_OK,intent);
                 setResult(RESULT_OK);
                 finish();
                 break;

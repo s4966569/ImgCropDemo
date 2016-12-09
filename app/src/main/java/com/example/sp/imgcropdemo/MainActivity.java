@@ -58,6 +58,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void dispatchSimplePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+        }
+    }
+
     private File createImageFile() throws IOException{
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
         String imageFileName = "JPEG_"+timeStamp+"_";
@@ -78,10 +85,13 @@ public class MainActivity extends AppCompatActivity {
             String str1 = Environment.getExternalStorageDirectory() + "/yanxiu/8k-river.jpg";
             Intent intent = new Intent(this,ImageCropActivity.class);
             intent.putExtra(ImageCropActivity.PHOTO_PATH,mCurrentPhotoPath);
+
             startActivityForResult(intent,REQUEST_CROP_PHOTO);
         }else if(requestCode == REQUEST_CROP_PHOTO && resultCode == RESULT_OK){
 //            byte[] byteArray = data.getByteArrayExtra("bitmap");
 //            Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
             mImageView.setImageBitmap(ImageCropActivity.bitmap);
         }
 
