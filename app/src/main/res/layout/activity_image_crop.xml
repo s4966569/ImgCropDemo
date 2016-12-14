@@ -11,9 +11,8 @@
 
     <com.example.sp.imgcropdemo.ImageCropOverView
         android:id="@+id/image_over_view"
-        android:layout_width="350dp"
-        android:layout_height="600dp"
-        android:layout_centerInParent="true"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <LinearLayout
         android:layout_width="match_parent"

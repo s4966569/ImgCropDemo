@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -78,13 +80,37 @@ public class ImageCropActivity extends Activity implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btn_save:
-                Bitmap crop_bitmap = Bitmap.createBitmap(mBitmap,image_over_view.getLeft(),image_over_view.getTop(),image_over_view.getWidth(),image_over_view.getHeight());
+                DisplayMetrics dm = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+                int w = dm.widthPixels;
+                int h = dm.heightPixels;
+
+                float xRatio = mBitmap.getWidth() / w ;
+                float yRatio = mBitmap.getHeight() / h ;
+
+//                Bitmap sourceBmp = ((BitmapDrawable)mImageView.getDrawable()).getBitmap();
+
+                Rect rect = image_over_view.getRect();
+
+                Bitmap sourceBmp = Bitmap.createScaledBitmap(mBitmap,mImageView.getWidth(),mImageView.getHeight(),false);
+
+                Bitmap crop_bitmap = Bitmap.createBitmap(sourceBmp,rect.left,rect.top,
+                        rect.width(),rect.height());
+
+
                 Log.i("left:",image_over_view.getLeft()+"");
                 Log.i("top:",image_over_view.getTop()+"");
                 Log.i("right:",image_over_view.getRight()+"");
                 Log.i("bottom:",image_over_view.getBottom()+"");
                 Log.i("X:",image_over_view.getX()+"");
                 Log.i("Y",image_over_view.getY()+"");
+
+                Log.i("width",mBitmap.getWidth()+"");
+                Log.i("height",mBitmap.getHeight()+"");
+
+                Log.i("bitmapdensity",mBitmap.getDensity()+"");
+                Log.i("screendensity",dm.densityDpi+"");
 //                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 //                crop_bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
 //                byte[] b = byteArrayOutputStream.toByteArray();
