@@ -29,6 +29,7 @@ public class ImageCropActivity extends Activity implements View.OnClickListener{
     Button btn_save,btn_cancel;
     public static Bitmap bitmap;
     public static final String PHOTO_PATH = "photoPath";
+    DisplayMetrics dm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,11 +42,14 @@ public class ImageCropActivity extends Activity implements View.OnClickListener{
         btn_cancel.setOnClickListener(this);
         photoPath = getIntent().getStringExtra(PHOTO_PATH);
         mBitmap = (Bitmap) getIntent().getExtras().get("data");
+
+         dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
     }
 
     private void setPic(String photoPath){
-        int targetW = mImageView.getWidth();
-        int targetH = mImageView.getHeight();
+        int targetW = dm.widthPixels;
+        int targetH = dm.heightPixels;
 
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
@@ -80,8 +84,6 @@ public class ImageCropActivity extends Activity implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btn_save:
-                DisplayMetrics dm = new DisplayMetrics();
-                getWindowManager().getDefaultDisplay().getMetrics(dm);
 
                 int w = dm.widthPixels;
                 int h = dm.heightPixels;

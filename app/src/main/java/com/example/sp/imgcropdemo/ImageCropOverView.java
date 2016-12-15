@@ -29,6 +29,7 @@ public class ImageCropOverView extends View {
     private int radios;
     private int mLastX, mLastY;
     private int mLeft, mRight, mTop, mBottom; //裁剪区域的四个参数
+    private View targetView ; //需要裁剪的目标View;
     //   p1********p2
     //     *      *
     //     *      *
