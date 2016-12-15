@@ -29,7 +29,7 @@ public class ImageCropOverView extends View {
     private int radios;
     private int mLastX, mLastY;
     private int mLeft, mRight, mTop, mBottom; //裁剪区域的四个参数
-    private View targetView ; //需要裁剪的目标View;
+    private View targetView ; //需要裁剪的目标View; 注意targetView 必须跟此View在同一个viewGroup里面
     //   p1********p2
     //     *      *
     //     *      *
@@ -78,15 +78,15 @@ public class ImageCropOverView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        int width = getWidth();
-        int height = getHeight();
+        int width = targetView.getWidth();
+        int height = targetView.getHeight();
 
         int len = Math.min(width, height);
         if (mInitLength == 0) {
             mInitLength = (int) (len * LENGTH_RATIO);
 
-            mLeft = (width - mInitLength) / 2;
-            mTop = (height - mInitLength) / 2;
+            mLeft = (width - mInitLength) / 2+targetView.getLeft();
+            mTop = (height - mInitLength) / 2+targetView.getTop();
             mRight = mLeft + mInitLength;
             mBottom = mTop + mInitLength;
         }
@@ -165,20 +165,20 @@ public class ImageCropOverView extends View {
                     Rect rect = new Rect(mLeft - strokeWidth / 2, mTop - strokeWidth / 2, mRight + strokeWidth / 2, mBottom + strokeWidth / 2);
                     if (isOutOfView(rect)) {
                         //不能从临界点坐标开始绘制（比如0,0；因为strokeWidth会占绘制区域跟非绘制区域各一半）
-                        if (rect.left < getLeft()) {
-                            mLeft = strokeWidth / 2;
+                        if (rect.left < targetView.getLeft()) {
+                            mLeft = strokeWidth / 2 + targetView.getLeft();
                             mRight = mRect.width() + mLeft;
                         }
-                        if (rect.right > getRight()) {
-                            mRight = getRight() - strokeWidth / 2;
+                        if (rect.right > targetView.getRight()) {
+                            mRight = targetView.getRight() - strokeWidth / 2;
                             mLeft = mRight - mRect.width();
                         }
-                        if (rect.top < getTop()) {
-                            mTop = strokeWidth / 2;
+                        if (rect.top < targetView.getTop()) {
+                            mTop = strokeWidth / 2 +targetView.getTop();
                             mBottom = mRect.height() + mTop;
                         }
-                        if (rect.bottom > getBottom()) {
-                            mBottom = getBottom() - strokeWidth / 2;
+                        if (rect.bottom > targetView.getBottom()) {
+                            mBottom = targetView.getBottom() - strokeWidth / 2;
                             mTop = mBottom - mRect.height();
                         }
                     }
@@ -190,9 +190,9 @@ public class ImageCropOverView extends View {
                             mLeft += deltaX;
                         if (mBottom - (mTop + deltaY) >= strokeWidth)
                             mTop += deltaY;
-                        if (mLeft - strokeWidth / 2 < getLeft())
+                        if (mLeft - strokeWidth / 2 < targetView.getLeft())
                             mLeft = strokeWidth / 2;
-                        if (mTop - strokeWidth / 2 < getTop())
+                        if (mTop - strokeWidth / 2 < targetView.getTop())
                             mTop = strokeWidth / 2;
                     } else if (touchPoint == p2) {
                         //拖动p2，只会改变right,top
@@ -200,9 +200,9 @@ public class ImageCropOverView extends View {
                             mRight += deltaX;
                         if (mBottom - (mTop + deltaY) >= strokeWidth)
                             mTop += deltaY;
-                        if (mRight + strokeWidth / 2 > getRight())
-                            mRight = getRight() - strokeWidth / 2;
-                        if (mTop - strokeWidth / 2 < getTop())
+                        if (mRight + strokeWidth / 2 > targetView.getRight())
+                            mRight = targetView.getRight() - strokeWidth / 2;
+                        if (mTop - strokeWidth / 2 < targetView.getTop())
                             mTop = strokeWidth / 2;
                     } else if (touchPoint == p3) {
                         //拖动p3,只会改变left，bottom
@@ -210,20 +210,20 @@ public class ImageCropOverView extends View {
                             mLeft += deltaX;
                         if (mBottom + deltaY - mTop >= strokeWidth)
                             mBottom += deltaY;
-                        if (mLeft - strokeWidth / 2 < getLeft())
+                        if (mLeft - strokeWidth / 2 < targetView.getLeft())
                             mLeft = strokeWidth / 2;
-                        if (mBottom + strokeWidth / 2 > getBottom())
-                            mBottom = getBottom() - strokeWidth / 2;
+                        if (mBottom + strokeWidth / 2 > targetView.getBottom())
+                            mBottom = targetView.getBottom() - strokeWidth / 2;
                     } else if (touchPoint == p4) {
                         //拖动p4只会改变right，bottom
                         if (mRight + deltaX - mLeft >= strokeWidth)
                             mRight += deltaX;
                         if (mBottom + deltaY - mTop >= strokeWidth)
                             mBottom += deltaY;
-                        if (mRight + strokeWidth / 2 > getRight())
-                            mRight = getRight() - strokeWidth / 2;
-                        if (mBottom + strokeWidth / 2 > getBottom())
-                            mBottom = getBottom() - strokeWidth / 2;
+                        if (mRight + strokeWidth / 2 > targetView.getRight())
+                            mRight = targetView.getRight() - strokeWidth / 2;
+                        if (mBottom + strokeWidth / 2 > targetView.getBottom())
+                            mBottom = targetView.getBottom() - strokeWidth / 2;
                     }
                 }
                 if (mLeft == mRect.left && mTop == mRect.top && mRight == mRect.right && mBottom == mRect.bottom) {
@@ -297,7 +297,7 @@ public class ImageCropOverView extends View {
      * @return
      */
     private boolean isOutOfView(Rect rect) {
-        if (rect.left >= getLeft() && rect.right <= getRight() && rect.top >= getTop() && rect.bottom <= getBottom()) {
+        if (rect.left >= targetView.getLeft() && rect.right <= targetView.getRight() && rect.top >= targetView.getTop() && rect.bottom <= targetView.getBottom()) {
             return false;
         }
         return true;
@@ -310,7 +310,16 @@ public class ImageCropOverView extends View {
         p4.set(rect.right, rect.bottom);
     }
 
+    public void setTargetView(View targetView) {
+        this.targetView = targetView;
+    }
+
+    /**
+     * 获取相对目标View的Rect
+     * @return
+     */
     public Rect getRect() {
-        return mRect;
+        Rect rect = new Rect(mRect.left - targetView.getLeft(),mRect.top-targetView.getTop(),mRect.right -targetView.getLeft(),mRect.bottom -targetView.getTop());
+        return rect;
     }
 }

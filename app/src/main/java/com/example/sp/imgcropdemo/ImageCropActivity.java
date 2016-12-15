@@ -43,7 +43,8 @@ public class ImageCropActivity extends Activity implements View.OnClickListener{
         photoPath = getIntent().getStringExtra(PHOTO_PATH);
         mBitmap = (Bitmap) getIntent().getExtras().get("data");
 
-         dm = new DisplayMetrics();
+        image_over_view.setTargetView(mImageView);
+        dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
     }
 
@@ -75,9 +76,9 @@ public class ImageCropActivity extends Activity implements View.OnClickListener{
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if(hasFocus)
+        if(hasFocus){
             setPic(photoPath);
-//        setPic(mBitmap);
+        }
     }
 
     @Override
