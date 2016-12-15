@@ -1,45 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/black">
 
-
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:layout_centerInParent="true"/>
-
-    <com.example.sp.imgcropdemo.ImageCropOverView
-        android:id="@+id/image_over_view"
+    <RelativeLayout
+        android:id="@+id/rl_crop"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:layout_centerInParent="true"/>
+
+        <com.example.sp.imgcropdemo.ImageCropOverView
+            android:id="@+id/image_over_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </RelativeLayout>
 
 
 
 
 
-    <LinearLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:gravity="center_horizontal">
+        android:layout_height="45dp"
+        android:gravity="center_vertical"
+        android:background="#2f2f2f">
 
-        <Button
-            android:id="@+id/btn_save"
-            android:layout_width="100dp"
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="保存"/>
-
-        <Button
-            android:id="@+id/btn_cancel"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
+            android:textColor="#12b7f5"
+            android:textSize="16sp"
+            android:padding="2dp"
+            android:layout_marginLeft="15dp"
             android:text="取消"/>
-    </LinearLayout>
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tv_crop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#12b7f5"
+            android:textSize="16sp"
+            android:padding="2dp"
+            android:text="裁剪"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"/>
+    </RelativeLayout>
+
+</LinearLayout>

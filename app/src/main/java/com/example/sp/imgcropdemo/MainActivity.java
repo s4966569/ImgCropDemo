@@ -1,5 +1,6 @@
 package com.example.sp.imgcropdemo;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,13 +19,14 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     Button btn_take_photo;
     ImageView mImageView;
     private String mCurrentPhotoPath;
     private final int REQUEST_TAKE_PHOTO = 0x01;
     private final int REQUEST_CROP_PHOTO = 0x02;
+    public static Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dispatchTakePictureIntent();
+//                dispatchSimplePictureIntent();
             }
         });
     }
@@ -67,13 +70,15 @@ public class MainActivity extends AppCompatActivity {
 
     private File createImageFile() throws IOException{
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-        String imageFileName = "JPEG_"+timeStamp+"_";
+        String imageFileName = "JPEG_"+timeStamp;
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,
                 ".jpg",
                 storageDir
         );
+//        File storageDir = new File(Environment.getExternalStorageDirectory() + "/images");
+//        File image = new File(storageDir,imageFileName+".jpg");
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
@@ -82,16 +87,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK){
-            String str1 = Environment.getExternalStorageDirectory() + "/yanxiu/8k-river.jpg";
+            String str1 = Environment.getExternalStorageDirectory() + "/yanxiu/5k_image.jpg";
             Intent intent = new Intent(this,ImageCropActivity.class);
             intent.putExtra(ImageCropActivity.PHOTO_PATH,mCurrentPhotoPath);
+//            intent.putExtra(ImageCropActivity.PHOTO_PATH,str1);
+//            bitmap = (Bitmap) data.getExtras().get("data");
+//            intent.putExtra("data",data.getExtras());
 
             startActivityForResult(intent,REQUEST_CROP_PHOTO);
         }else if(requestCode == REQUEST_CROP_PHOTO && resultCode == RESULT_OK){
-//            byte[] byteArray = data.getByteArrayExtra("bitmap");
-//            Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
-//            Bundle extras = data.getExtras();
-//            Bitmap imageBitmap = (Bitmap) extras.get("data");
             mImageView.setImageBitmap(ImageCropActivity.bitmap);
         }
 
