@@ -29,7 +29,7 @@ public class ImageCropOverView extends View {
     private int radios;
     private int mLastX, mLastY;
     private int mLeft, mRight, mTop, mBottom; //裁剪区域的四个参数
-    private View targetView ; //需要裁剪的目标View; 注意targetView 必须跟此View在同一个viewGroup里面
+    private View targetView; //需要裁剪的目标View; 注意targetView 必须跟此View在同一个viewGroup里面
     //   p1********p2
     //     *      *
     //     *      *
@@ -85,8 +85,8 @@ public class ImageCropOverView extends View {
         if (mInitLength == 0) {
             mInitLength = (int) (len * LENGTH_RATIO);
 
-            mLeft = (width - mInitLength) / 2+targetView.getLeft();
-            mTop = (height - mInitLength) / 2+targetView.getTop();
+            mLeft = (width - mInitLength) / 2 + targetView.getLeft();
+            mTop = (height - mInitLength) / 2 + targetView.getTop();
             mRight = mLeft + mInitLength;
             mBottom = mTop + mInitLength;
         }
@@ -174,7 +174,7 @@ public class ImageCropOverView extends View {
                             mLeft = mRight - mRect.width();
                         }
                         if (rect.top < targetView.getTop()) {
-                            mTop = strokeWidth / 2 +targetView.getTop();
+                            mTop = strokeWidth / 2 + targetView.getTop();
                             mBottom = mRect.height() + mTop;
                         }
                         if (rect.bottom > targetView.getBottom()) {
@@ -187,83 +187,84 @@ public class ImageCropOverView extends View {
                     if (touchPoint == p1) {
                         //拖动p1时，只会改变left,top(没到最小临界值的时候)
                         //左右拖动
-                        if (mLeft - strokeWidth / 2 < targetView.getLeft())
+                        if (mLeft + deltaX - strokeWidth / 2 < targetView.getLeft())
                             //往左拖动的时候，不能超过左边界
                             mLeft = strokeWidth / 2 + targetView.getLeft();
-                        if (mRight - (mLeft + deltaX) >= strokeWidth){
+                        else if (mRight - (mLeft + deltaX) >= strokeWidth) {
                             //往右拖动时，没到拖动临界值（最小宽度），让它一直跟着手势拖动
                             mLeft += deltaX;
-                        }else if(mRight + deltaX <= targetView.getRight() - strokeWidth /2){
+                        } else if (mRight + deltaX <= targetView.getRight() - strokeWidth / 2) {
                             //当往右边拉到最小宽度，且最右边不出边界，就让它继续往右移动（其余三个点的处理逻辑类似）
-                            mLeft+=deltaX;
-                            mRight+=deltaX;
+                            mLeft += deltaX;
+                            mRight += deltaX;
                         }
                         //上下拖动
-                        if (mTop - strokeWidth / 2 < targetView.getTop())
+                        if (mTop + deltaY - strokeWidth / 2 < targetView.getTop())
                             //往上拖动的时候，不能超过上边界
                             mTop = strokeWidth / 2 + targetView.getTop();
-                        if (mBottom - (mTop + deltaY) >= strokeWidth){
+                        else if (mBottom - (mTop + deltaY) >= strokeWidth) {
                             //往下拖动的时候，没拖动到临界值（最小高度），让它一直跟着手势拖动
                             mTop += deltaY;
-                        } else if(mBottom +deltaY <= targetView.getBottom() - strokeWidth /2){
+                        } else if (mBottom + deltaY <= targetView.getBottom() - strokeWidth / 2) {
                             //当往下拉到最小高度，且最下边不出边界，就让它继续往下移动（其余三个点的处理逻辑类似）
-                            mTop +=deltaY;
+                            mTop += deltaY;
                             mBottom += deltaY;
                         }
                     } else if (touchPoint == p2) {
                         //拖动p2，只会改变right,top(没到最小临界值的时候)
-                        if (mRight + strokeWidth / 2 > targetView.getRight())
+                        if (mRight + deltaX + strokeWidth / 2 > targetView.getRight())
                             mRight = targetView.getRight() - strokeWidth / 2;
-                        if (mRight + deltaX - mLeft >= strokeWidth){
+                        else if (mRight + deltaX - mLeft >= strokeWidth) {
                             mRight += deltaX;
-                        }else if(mLeft+deltaX >= targetView.getLeft() + strokeWidth /2){
-                            mLeft+=deltaX;
-                            mRight+=deltaX;
+                        } else if (mLeft + deltaX >= targetView.getLeft() + strokeWidth / 2) {
+                            mLeft += deltaX;
+                            mRight += deltaX;
                         }
-                        if (mTop - strokeWidth / 2 < targetView.getTop())
+                        if (mTop + deltaY - strokeWidth / 2 < targetView.getTop())
                             mTop = strokeWidth / 2 + targetView.getTop();
-                        if (mBottom - (mTop + deltaY) >= strokeWidth){
+                        else if (mBottom - (mTop + deltaY) >= strokeWidth) {
                             mTop += deltaY;
-                        }else if(mBottom + deltaY <= targetView.getBottom() - strokeWidth /2){
-                            mTop+=deltaY;
-                            mBottom+=deltaY;
+                        } else if (mBottom + deltaY <= targetView.getBottom() - strokeWidth / 2) {
+                            mTop += deltaY;
+                            mBottom += deltaY;
                         }
 
                     } else if (touchPoint == p3) {
                         //拖动p3,只会改变left，bottom(没到最小临界值的时候)
-                        if (mLeft - strokeWidth / 2 < targetView.getLeft())
+                        if (mLeft + deltaX - strokeWidth / 2 < targetView.getLeft())
                             mLeft = strokeWidth / 2 + targetView.getLeft();
-                        if (mRight - (mLeft + deltaX) >= strokeWidth){
+                        else if (mRight - (mLeft + deltaX) >= strokeWidth) {
                             mLeft += deltaX;
-                        }else if(mRight + deltaX <= targetView.getRight() - strokeWidth /2){
-                            mLeft+=deltaX;
-                            mRight+=deltaX;
+                        } else if (mRight + deltaX <= targetView.getRight() - strokeWidth / 2) {
+                            mLeft += deltaX;
+                            mRight += deltaX;
                         }
-                        if (mBottom + strokeWidth / 2 > targetView.getBottom())
+                        if (mBottom + deltaY + strokeWidth / 2 > targetView.getBottom())
                             mBottom = targetView.getBottom() - strokeWidth / 2;
-                        if (mBottom + deltaY - mTop >= strokeWidth){
+                        else if (mBottom + deltaY - mTop >= strokeWidth) {
                             mBottom += deltaY;
-                        }else if(mTop + deltaY >= targetView.getTop() + strokeWidth /2) {
-                            mTop+=deltaY;
-                            mBottom+=deltaY;
+                        } else if (mTop + deltaY >= targetView.getTop() + strokeWidth / 2) {
+                            mTop += deltaY;
+                            mBottom += deltaY;
                         }
                     } else if (touchPoint == p4) {
                         //拖动p4只会改变right，bottom(没到最小临界值的时候)
-                        if (mRight + strokeWidth / 2 > targetView.getRight())
+                        if (mRight + deltaX + strokeWidth / 2 > targetView.getRight())
                             mRight = targetView.getRight() - strokeWidth / 2;
-                        if (mRight + deltaX - mLeft >= strokeWidth){
+                        else if (mRight + deltaX - mLeft >= strokeWidth) {
                             mRight += deltaX;
-                        }else if(mLeft + deltaX >= targetView.getLeft() + strokeWidth /2){
-                            mLeft+=deltaX;
-                            mRight+=deltaX;
+                        } else if (mLeft + deltaX >= targetView.getLeft() + strokeWidth / 2) {
+                            mLeft += deltaX;
+                            mRight += deltaX;
                         }
-                        if (mBottom + strokeWidth / 2 > targetView.getBottom())
+
+                        if (mBottom + deltaY + strokeWidth / 2 > targetView.getBottom())
                             mBottom = targetView.getBottom() - strokeWidth / 2;
-                        if (mBottom + deltaY - mTop >= strokeWidth){
+                        else if (mBottom + deltaY - mTop >= strokeWidth) {
                             mBottom += deltaY;
-                        }else if(mTop + deltaY >= targetView.getTop() + strokeWidth /2){
-                            mTop+=deltaY;
-                            mBottom+=deltaY;
+                        } else if (mTop + deltaY >= targetView.getTop() + strokeWidth / 2) {
+                            mTop += deltaY;
+                            mBottom += deltaY;
                         }
                     }
                 }
@@ -357,10 +358,11 @@ public class ImageCropOverView extends View {
 
     /**
      * 获取相对目标View的Rect
+     *
      * @return
      */
     public Rect getRect() {
-        Rect rect = new Rect(mRect.left - targetView.getLeft(),mRect.top-targetView.getTop(),mRect.right -targetView.getLeft(),mRect.bottom -targetView.getTop());
+        Rect rect = new Rect(mRect.left - targetView.getLeft(), mRect.top - targetView.getTop(), mRect.right - targetView.getLeft(), mRect.bottom - targetView.getTop());
         return rect;
     }
 }
