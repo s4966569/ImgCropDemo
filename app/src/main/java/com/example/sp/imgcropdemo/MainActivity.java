@@ -87,14 +87,10 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK){
-            String str1 = Environment.getExternalStorageDirectory() + "/yanxiu/5k_image.jpg";
-            Intent intent = new Intent(this,ImageCropActivity.class);
-            intent.putExtra(ImageCropActivity.PHOTO_PATH,mCurrentPhotoPath);
-//            intent.putExtra(ImageCropActivity.PHOTO_PATH,str1);
-//            bitmap = (Bitmap) data.getExtras().get("data");
-//            intent.putExtra("data",data.getExtras());
-
-            startActivityForResult(intent,REQUEST_CROP_PHOTO);
+            String str1 = Environment.getExternalStorageDirectory() + "/yanxiu/8k_image.jpg";
+            Intent imageCropIntent = new Intent(this,ImageCropActivity.class);
+            imageCropIntent.putExtra(ImageCropActivity.PHOTO_PATH,mCurrentPhotoPath);
+            startActivityForResult(imageCropIntent,REQUEST_CROP_PHOTO);
         }else if(requestCode == REQUEST_CROP_PHOTO && resultCode == RESULT_OK){
             mImageView.setImageBitmap(ImageCropActivity.bitmap);
         }

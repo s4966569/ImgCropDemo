@@ -17,10 +17,8 @@ import android.view.View;
 
 public class ImageCropOverView extends View {
 
-    private int mColorBounds = Color.WHITE;
-    private int mColorBg = Color.GRAY;
-    private Paint rectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint rectPaint ;
+    private Paint circlePaint;
     private Rect mRect;   //带一半白线边框的裁剪区域（默认画笔的stroke会占裁剪区域跟非裁剪区域各一半）
     private Rect mClipRect;  //带整个白线边框的裁剪区域
     private static final double LENGTH_RATIO = 0.8;
@@ -42,6 +40,7 @@ public class ImageCropOverView extends View {
 
     private Point touchPoint;  //当前拖动的圆点
     private int dragMode;
+    private boolean isFirstDraw = true;
     private static final int DRAG_MOVE = 0x01;
     private static final int DRAG_SCALE = 0x02;
 
@@ -64,13 +63,17 @@ public class ImageCropOverView extends View {
     private void init() {
         mRect = new Rect(0, 0, 0, 0);
         mClipRect = new Rect(0, 0, 0, 0);
+        rectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
         strokeWidth = Utils.convertDpToPx(getContext(), 2);
         radios = Utils.convertDpToPx(getContext(), 10);
-        rectPaint.setColor(mColorBounds);
+
+        rectPaint.setColor(getResources().getColor(R.color.colorRectStroke));
         rectPaint.setStyle(Paint.Style.STROKE);
         rectPaint.setStrokeWidth(strokeWidth);
 
-        circlePaint.setColor(Color.parseColor("#99cccccc"));
+        circlePaint.setColor(getResources().getColor(R.color.colorDot));
         circlePaint.setStyle(Paint.Style.FILL);
     }
 
@@ -80,7 +83,8 @@ public class ImageCropOverView extends View {
 
         int width = targetView.getWidth();
         int height = targetView.getHeight();
-
+        if(width ==0 && height == 0)
+            return;
         int len = Math.min(width, height);
         if (mInitLength == 0) {
             mInitLength = (int) (len * LENGTH_RATIO);
@@ -116,7 +120,7 @@ public class ImageCropOverView extends View {
 
         canvas.clipRect(mClipRect, Region.Op.DIFFERENCE);
         //绘制背景
-        canvas.drawColor(Color.parseColor("#99000000"));
+        canvas.drawColor(getResources().getColor(R.color.colorOverViewBg));
         canvas.restore();
 
     }
