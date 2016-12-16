@@ -39,44 +39,26 @@ public class ImageCropActivity extends Activity implements View.OnClickListener{
         tv_crop.setOnClickListener(this);
         tv_cancel.setOnClickListener(this);
         photoPath = getIntent().getStringExtra(PHOTO_PATH);
-//        mBitmap = MainActivity.bitmap;
 
         dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         image_over_view.setTargetView(mImageView);
     }
 
-    private void setPic(String photoPath){
-        int targetW = rl_crop.getWidth();
-        int targetH = rl_crop.getHeight();
-
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(photoPath,bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-//        if(photoW > photoH)
-//            targetH = targetH /2;
-
-        int scaleFactor = Utils.calculateInSampleSize(bmOptions,targetW,targetH);
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(photoPath,bmOptions);
-        mImageView.setImageBitmap(bitmap);
-        mBitmap = bitmap;
-    }
-
-    private void setPic(Bitmap bmp){
-        mImageView.setImageBitmap(bmp);
-    }
-
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if(hasFocus){
-            setPic(photoPath);
+//            setPic(photoPath);
+            BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(new OnDecodeCompleteListener() {
+                @Override
+                public void onComplete(Bitmap bitmap) {
+                    mImageView.setImageBitmap(bitmap);
+                    mBitmap = bitmap;
+                    image_over_view.postInvalidate();
+                }
+            });
+            bitmapWorkerTask.execute(photoPath,String.valueOf(rl_crop.getWidth()),String.valueOf(rl_crop.getHeight()));
         }
     }
 
@@ -87,9 +69,6 @@ public class ImageCropActivity extends Activity implements View.OnClickListener{
 
                 int w = dm.widthPixels;
                 int h = dm.heightPixels;
-
-                float xRatio = mBitmap.getWidth() / w ;
-                float yRatio = mBitmap.getHeight() / h ;
 
 //                Bitmap sourceBmp = ((BitmapDrawable)mImageView.getDrawable()).getBitmap();
 
@@ -123,5 +102,31 @@ public class ImageCropActivity extends Activity implements View.OnClickListener{
             default:
                 break;
         }
+    }
+
+    private void setPic(String photoPath){
+        int targetW = rl_crop.getWidth();
+        int targetH = rl_crop.getHeight();
+
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(photoPath,bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        if(photoW > photoH)
+            targetH = targetH /2;
+
+        int scaleFactor = Utils.calculateInSampleSize(bmOptions,targetW,targetH);
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(photoPath,bmOptions);
+        mImageView.setImageBitmap(bitmap);
+        mBitmap = bitmap;
+    }
+
+    private void setPic(Bitmap bmp){
+        mImageView.setImageBitmap(bmp);
     }
 }
