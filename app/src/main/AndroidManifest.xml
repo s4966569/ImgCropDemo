@@ -21,6 +21,7 @@
 
         <activity android:name=".ImageCropActivity"
             android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:launchMode="singleTop"/>
 
     </application>
