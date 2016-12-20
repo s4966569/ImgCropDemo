@@ -2,7 +2,6 @@ package com.example.sp.imgcropdemo;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -149,11 +148,11 @@ public class ImageCropOverView extends View {
         int y = (int) event.getY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (touchDot(x, y) == null && !isTouchInRect(x, y, mRect))
+                if (getTouchDot(x, y) == null && !isTouchInRect(x, y, mRect))
                     return super.onTouchEvent(event);
-                else if (touchDot(x, y) != null) {
+                else if (getTouchDot(x, y) != null) {
                     dragMode = DRAG_SCALE;
-                    touchPoint = touchDot(x, y);
+                    touchPoint = getTouchDot(x, y);
                 } else {
                     dragMode = DRAG_MOVE;
                 }
@@ -311,7 +310,7 @@ public class ImageCropOverView extends View {
      * @param y 触摸位置的y坐标
      * @return 当前触摸的圆点的圆心，触摸位置不在四个圆点上则返回null
      */
-    private Point touchDot(int x, int y) {
+    private Point getTouchDot(int x, int y) {
         Point p = new Point(x, y);
         if (isPointInCircle(p, p1))
             return p1;

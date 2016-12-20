@@ -26,6 +26,7 @@ public class MainActivity extends Activity {
     private String mCurrentPhotoPath;
     private final int REQUEST_TAKE_PHOTO = 0x01;
     private final int REQUEST_CROP_PHOTO = 0x02;
+    private final int REQUEST_CAPTURE = 0x03;
     public static Bitmap bitmap;
 
     @Override
@@ -37,8 +38,8 @@ public class MainActivity extends Activity {
         btn_take_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dispatchTakePictureIntent();
-//                dispatchSimplePictureIntent();
+//                dispatchTakePictureIntent();
+                dispatchSimplePictureIntent();
             }
         });
     }
@@ -62,10 +63,8 @@ public class MainActivity extends Activity {
     }
 
     private void dispatchSimplePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-        }
+        Intent takePictureIntent = new Intent(this,CapatureActivity.class);
+        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
     }
 
     private File createImageFile() throws IOException{
@@ -93,6 +92,8 @@ public class MainActivity extends Activity {
             startActivityForResult(imageCropIntent,REQUEST_CROP_PHOTO);
         }else if(requestCode == REQUEST_CROP_PHOTO && resultCode == RESULT_OK){
             mImageView.setImageBitmap(ImageCropActivity.bitmap);
+        }else if(requestCode == REQUEST_CAPTURE && resultCode == RESULT_OK){
+            mImageView.setImageBitmap(CapatureActivity.bitmap);
         }
 
     }
