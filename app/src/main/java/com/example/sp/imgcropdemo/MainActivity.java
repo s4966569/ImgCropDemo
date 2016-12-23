@@ -38,8 +38,8 @@ public class MainActivity extends Activity {
         btn_take_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dispatchTakePictureIntent();
-//                dispatchSimplePictureIntent();
+//                dispatchTakePictureIntent();
+                dispatchSimplePictureIntent();
             }
         });
     }

@@ -72,6 +72,7 @@ public class CapatureActivity extends Activity implements View.OnClickListener {
                 }
                 Camera.Parameters parameters = mCamera.getParameters();
                 parameters.setRotation(rotation);
+//                parameters.set("rotation",rotation);
                 mCamera.setParameters(parameters);
                 Log.i("rotation ", "rotation:" + rotation);
                 Log.i("cameraOritation ", "cameraOritation:" + info.orientation);
