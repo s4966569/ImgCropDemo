@@ -44,7 +44,7 @@ public class ImageCropActivity extends Activity implements View.OnClickListener{
         super.onWindowFocusChanged(hasFocus);
         if(hasFocus){
 //            setPic(photoPath);
-            BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(new OnDecodeCompleteListener() {
+            BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(new OnTaskCompleteListener<Bitmap>() {
                 @Override
                 public void onComplete(Bitmap bitmap) {
                     if(bitmap == null){

@@ -38,8 +38,8 @@ public class MainActivity extends Activity {
         btn_take_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                dispatchTakePictureIntent();
-                dispatchSimplePictureIntent();
+                dispatchTakePictureIntent();
+//                dispatchSimplePictureIntent();
             }
         });
     }
@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
 
     private void dispatchSimplePictureIntent() {
         Intent takePictureIntent = new Intent(this,CapatureActivity.class);
-        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+        startActivityForResult(takePictureIntent, REQUEST_CAPTURE);
     }
 
     private File createImageFile() throws IOException{
@@ -91,6 +91,9 @@ public class MainActivity extends Activity {
             imageCropIntent.putExtra(ImageCropActivity.PHOTO_PATH,mCurrentPhotoPath);
             startActivityForResult(imageCropIntent,REQUEST_CROP_PHOTO);
         }else if(requestCode == REQUEST_CROP_PHOTO && resultCode == RESULT_OK){
+            String filePath = Environment.getExternalStorageDirectory() + "/yanxiu/crop_image.jpg";
+            WriteBitmapToFileWorkerTask workerTask = new WriteBitmapToFileWorkerTask(null);
+            workerTask.execute(filePath,ImageCropActivity.bitmap);
             mImageView.setImageBitmap(ImageCropActivity.bitmap);
         }else if(requestCode == REQUEST_CAPTURE && resultCode == RESULT_OK){
             mImageView.setImageBitmap(CapatureActivity.bitmap);

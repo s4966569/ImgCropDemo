@@ -2,7 +2,6 @@ package com.example.sp.imgcropdemo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaPlayer;
 import android.os.AsyncTask;
 
 /**
@@ -10,10 +9,10 @@ import android.os.AsyncTask;
  */
 
 public class BitmapWorkerTask extends AsyncTask<String,Integer,Bitmap> {
-    private OnDecodeCompleteListener onDecodeCompleteListener;
+    private OnTaskCompleteListener<Bitmap> onTaskCompleteListener;
 
-    public BitmapWorkerTask(OnDecodeCompleteListener onDecodeCompleteListener) {
-        this.onDecodeCompleteListener = onDecodeCompleteListener;
+    public BitmapWorkerTask(OnTaskCompleteListener<Bitmap> onTaskCompleteListener) {
+        this.onTaskCompleteListener = onTaskCompleteListener;
     }
 
     @Override
@@ -41,7 +40,7 @@ public class BitmapWorkerTask extends AsyncTask<String,Integer,Bitmap> {
 
     @Override
     protected void onPostExecute(Bitmap bitmap) {
-        if(onDecodeCompleteListener != null)
-            onDecodeCompleteListener.onComplete(bitmap);
+        if(onTaskCompleteListener != null)
+            onTaskCompleteListener.onComplete(bitmap);
     }
 }
