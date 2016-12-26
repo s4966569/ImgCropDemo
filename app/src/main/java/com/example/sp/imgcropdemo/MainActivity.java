@@ -24,9 +24,9 @@ public class MainActivity extends Activity {
     Button btn_take_photo;
     ImageView mImageView;
     private String mCurrentPhotoPath;
-    private final int REQUEST_TAKE_PHOTO = 0x01;
-    private final int REQUEST_CROP_PHOTO = 0x02;
-    private final int REQUEST_CAPTURE = 0x03;
+    public final static int REQUEST_TAKE_PHOTO = 0x01;
+    public final static int REQUEST_CROP_PHOTO = 0x02;
+    public final static int REQUEST_CAPTURE = 0x03;
     public static Bitmap bitmap;
 
     @Override
@@ -96,7 +96,13 @@ public class MainActivity extends Activity {
             workerTask.execute(filePath,ImageCropActivity.bitmap);
             mImageView.setImageBitmap(ImageCropActivity.bitmap);
         }else if(requestCode == REQUEST_CAPTURE && resultCode == RESULT_OK){
-            mImageView.setImageBitmap(CapatureActivity.bitmap);
+//            mImageView.setImageBitmap(CapatureActivity.bitmap);
+//            Intent imageCropIntent = new Intent(this,ImageCropActivity.class);
+//            imageCropIntent.putExtra(ImageCropActivity.PHOTO_PATH,data.getStringExtra("data"));
+//            startActivityForResult(imageCropIntent,REQUEST_CROP_PHOTO);
+            mImageView.setImageBitmap(ImageCropActivity.bitmap);
+            CapatureActivity.savedBitmap = null;
+            ImageCropActivity.bitmap = null;
         }
 
     }

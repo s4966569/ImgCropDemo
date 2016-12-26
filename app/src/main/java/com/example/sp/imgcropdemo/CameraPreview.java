@@ -2,6 +2,8 @@ package com.example.sp.imgcropdemo;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.ImageFormat;
+import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -123,7 +125,11 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                mCamera.autoFocus(null);
+                try {
+                    mCamera.autoFocus(null);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 return true;
             case MotionEvent.ACTION_UP:
                 break;

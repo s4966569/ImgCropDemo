@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,7 +24,7 @@ public class ImageCropActivity extends Activity implements View.OnClickListener{
     TextView tv_crop, tv_cancel;
     View rl_crop;
     public static Bitmap bitmap;
-    public static final String PHOTO_PATH = "photoPath";
+    public static final String PHOTO_PATH = "data";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,14 +36,19 @@ public class ImageCropActivity extends Activity implements View.OnClickListener{
         rl_crop = findViewById(R.id.rl_crop);
         tv_crop.setOnClickListener(this);
         tv_cancel.setOnClickListener(this);
-        photoPath = getIntent().getStringExtra(PHOTO_PATH);
+        if(!TextUtils.isEmpty(photoPath)){
+            photoPath = getIntent().getStringExtra(PHOTO_PATH);
+        }else {
+            mBitmap = CapatureActivity.savedBitmap;
+            mImageView.setImageBitmap(mBitmap);
+        }
         image_over_view.setTargetView(mImageView);
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if(hasFocus){
+        if(hasFocus && !TextUtils.isEmpty(photoPath)){
 //            setPic(photoPath);
             BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(new OnTaskCompleteListener<Bitmap>() {
                 @Override
@@ -67,7 +73,6 @@ public class ImageCropActivity extends Activity implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.tv_crop:
-//                Bitmap sourceBmp = ((BitmapDrawable)mImageView.getDrawable()).getBitmap();
 
                 Rect rect = image_over_view.getRect();
 
@@ -88,26 +93,4 @@ public class ImageCropActivity extends Activity implements View.OnClickListener{
         }
     }
 
-    private void setPic(String photoPath){
-        int targetW = rl_crop.getWidth();
-        int targetH = rl_crop.getHeight();
-
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(photoPath,bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        if(photoW > photoH)
-            targetH = targetH /2;
-
-        int scaleFactor = Utils.calculateInSampleSize(bmOptions,targetW,targetH);
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(photoPath,bmOptions);
-        mImageView.setImageBitmap(bitmap);
-        mBitmap = bitmap;
-        mImageView.postInvalidate();
-    }
 }
