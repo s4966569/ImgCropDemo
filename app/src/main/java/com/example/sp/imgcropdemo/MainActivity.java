@@ -40,6 +40,7 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
 //                dispatchTakePictureIntent();
                 dispatchSimplePictureIntent();
+//                dispatchCrashIntent();
             }
         });
     }
@@ -65,6 +66,11 @@ public class MainActivity extends Activity {
     private void dispatchSimplePictureIntent() {
         Intent takePictureIntent = new Intent(this,CapatureActivity.class);
         startActivityForResult(takePictureIntent, REQUEST_CAPTURE);
+    }
+
+    private void dispatchCrashIntent(){
+        Intent crashIntent = new Intent(this,CrashTestActivity.class);
+        startActivity(crashIntent);
     }
 
     private File createImageFile() throws IOException{
