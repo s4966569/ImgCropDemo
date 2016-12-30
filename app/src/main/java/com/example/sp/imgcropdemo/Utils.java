@@ -33,7 +33,7 @@ public class Utils {
             final int halfWidth = width / 2;
 
             while ((halfHeight / inSampleSize) >= reqHeight
-                    && (halfWidth / inSampleSize) >= reqWidth) {
+                    || (halfWidth / inSampleSize) >= reqWidth) {
                 inSampleSize *= 2;
             }
         }
