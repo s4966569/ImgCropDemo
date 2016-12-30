@@ -1,6 +1,7 @@
 package com.example.sp.imgcropdemo;
 
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
- * Created by sp on 16-12-16.
+ * Created by sunpeng on 2016/12/30.
  */
 
 public class FileUtils {
@@ -22,5 +23,21 @@ public class FileUtils {
                 storageDir
         );
         return image;
+    }
+
+    public static boolean fileIsExists(String path) {
+        if (path == null || path.trim().length() <= 0) {
+            return false;
+        }
+        try {
+            File f = new File(path);
+            if (!f.exists()) {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        Log.e("TMG",path+"file not exists");
+        return true;
     }
 }

@@ -21,7 +21,7 @@ import java.util.Calendar;
 
 public class MainActivity extends Activity {
 
-    Button btn_take_photo;
+    Button btn_take_photo,btn_select_photo;
     ImageView mImageView;
     private String mCurrentPhotoPath;
     public final static int REQUEST_TAKE_PHOTO = 0x01;
@@ -35,12 +35,20 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         mImageView = (ImageView) findViewById(R.id.image);
         btn_take_photo = (Button) findViewById(R.id.btn_take_photo);
+        btn_select_photo = (Button) findViewById(R.id.btn_select_photo);
         btn_take_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                dispatchTakePictureIntent();
                 dispatchSimplePictureIntent();
 //                dispatchCrashIntent();
+            }
+        });
+
+        btn_select_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispatchPhotoSelectIntent();
             }
         });
     }
@@ -66,6 +74,11 @@ public class MainActivity extends Activity {
     private void dispatchSimplePictureIntent() {
         Intent takePictureIntent = new Intent(this,CapatureActivity.class);
         startActivityForResult(takePictureIntent, REQUEST_CAPTURE);
+    }
+
+    private void dispatchPhotoSelectIntent(){
+        Intent photoSelectIntent = new Intent(this,PhotoSelectActivity.class);
+        startActivity(photoSelectIntent);
     }
 
     private void dispatchCrashIntent(){
