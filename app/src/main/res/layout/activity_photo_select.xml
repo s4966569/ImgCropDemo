@@ -6,6 +6,28 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/tv_switch_dir"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="@string/all_picture"
+        android:gravity="center_vertical"
+        android:textSize="20sp"
+        android:background="@android:color/holo_orange_light"/>
+
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="3"
+        android:gravity="center"
+        android:horizontalSpacing="1dp"
+        android:verticalSpacing="1dp"
+        android:layout_margin="1dp"
+        android:stretchMode="columnWidth"
+        android:visibility="gone"/>
 
 </LinearLayout>
