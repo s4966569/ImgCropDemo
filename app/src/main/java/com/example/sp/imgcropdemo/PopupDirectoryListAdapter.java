@@ -51,7 +51,7 @@ public class PopupDirectoryListAdapter extends BaseAdapter {
         ViewHolder holder;
         if (convertView == null) {
             LayoutInflater mLayoutInflater = LayoutInflater.from(parent.getContext());
-            convertView = mLayoutInflater.inflate(R.layout.__picker_item_directory, parent, false);
+            convertView = mLayoutInflater.inflate(R.layout.picker_item_directory, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
@@ -83,7 +83,7 @@ public class PopupDirectoryListAdapter extends BaseAdapter {
                     .error(R.drawable.__picker_ic_broken_image_black_48dp)
                     .into(ivCover);
             tvName.setText(directory.getName());
-            tvCount.setText(tvCount.getContext().getString(R.string.__picker_image_count, directory.getPhotos().size()));
+            tvCount.setText(tvCount.getContext().getString(R.string.picker_image_count, directory.getPhotos().size()));
         }
     }
 

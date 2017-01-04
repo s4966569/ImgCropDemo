@@ -6,9 +6,9 @@
     <color name="colorRectStroke">#ffffff</color>
     <color name="colorOverViewBg">#99000000</color>
     <color name="colorDot">#99cccccc</color>
-    <color name="__picker_common_primary">#f3f3f3</color>
-    <color name="__picker_black_40">#282828</color>
-    <color name="__picker_text_40">#282828</color>
-    <color name="__picker_text_80">#505050</color>
-    <color name="__picker_text_120">#787878</color>
+    <color name="colorPickerCommonPrimary">#f3f3f3</color>
+    <color name="colorPickerBlack_40">#282828</color>
+    <color name="colorPickerText_40">#282828</color>
+    <color name="colorPickerText_80">#505050</color>
+    <color name="colorPickerText_120">#787878</color>
 </resources>

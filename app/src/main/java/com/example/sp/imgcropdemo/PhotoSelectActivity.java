@@ -17,7 +17,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import com.example.sp.imgcropdemo.photoLoader.MediaStoreHelper;
+import com.example.sp.imgcropdemo.photoLoader.PhotoStoreHelper;
 import com.example.sp.imgcropdemo.photoLoader.Photo;
 import com.example.sp.imgcropdemo.photoLoader.PhotoDirectory;
 import com.example.sp.imgcropdemo.photoLoader.PhotoLoaderConstant;
@@ -37,11 +37,11 @@ public class PhotoSelectActivity extends Activity {
     private ListPopupWindow listPopupWindow;
     //目录弹出框的一次最多显示的目录数目
     public static int COUNT_MAX = 4;
-    PhotoGridAdapter photoGridAdapter;
-    PhotoGridAdapter1 photoGridAdapter1;
-    PopupDirectoryListAdapter popDirListAdapter;
-    List<PhotoDirectory> directories = new ArrayList<>();
-    List<Photo> photos = new ArrayList<>();
+    private PhotoGridAdapter photoGridAdapter;
+    private PhotoGridAdapter1 photoGridAdapter1;
+    private PopupDirectoryListAdapter popDirListAdapter;
+    private List<PhotoDirectory> directories = new ArrayList<>();
+    private List<Photo> photos = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +76,7 @@ public class PhotoSelectActivity extends Activity {
                 photos.clear();
                 photos.addAll(directories.get(position).getPhotos());
                 photoGridAdapter.notifyDataSetChanged();
+                recyclerView.scrollToPosition(0);
             }
         });
 
@@ -99,10 +100,10 @@ public class PhotoSelectActivity extends Activity {
 
         Bundle args = new Bundle();
         args.putBoolean(PhotoLoaderConstant.EXTRA_SHOW_GIF,false);
-        MediaStoreHelper.getPhotoDirs(this,args,photosResultCallback);
+        PhotoStoreHelper.getPhotoDirs(this,args,photosResultCallback);
     }
 
-    private MediaStoreHelper.PhotosResultCallback photosResultCallback = new MediaStoreHelper.PhotosResultCallback() {
+    private PhotoStoreHelper.PhotosResultCallback photosResultCallback = new PhotoStoreHelper.PhotosResultCallback() {
         @Override
         public void onResultCallback(List<PhotoDirectory> directories) {
             refreshData(directories);
@@ -119,7 +120,7 @@ public class PhotoSelectActivity extends Activity {
 //        for(PhotoDirectory directory : directories){
 //            photos.addAll(directory.getPhotos());
 //        }
-        photos.addAll(directories.get(MediaStoreHelper.INDEX_ALL_PHOTOS).getPhotos());
+        photos.addAll(directories.get(PhotoStoreHelper.INDEX_ALL_PHOTOS).getPhotos());
         Log.i("count",photos.size()+"");
         photoGridAdapter.notifyDataSetChanged();
 //        photoGridAdapter1.notifyDataSetChanged();

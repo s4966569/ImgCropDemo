@@ -5,7 +5,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 
 /**
- * Created by donglua on 2016/10/19.
+ * Created by sunpeng on 2016/12/30.
  */
 
 public class PermissionsConstant {

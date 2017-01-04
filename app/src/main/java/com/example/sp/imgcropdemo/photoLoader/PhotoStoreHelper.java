@@ -24,7 +24,7 @@ import static android.provider.MediaStore.MediaColumns.SIZE;
 /**
  * Created by sunpeng on 2016/12/30.
  */
-public class MediaStoreHelper {
+public class PhotoStoreHelper {
 
   public final static int INDEX_ALL_PHOTOS = 0;
 
