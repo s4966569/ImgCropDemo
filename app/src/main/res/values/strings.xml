@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ImgCropDemo</string>
+    <string name="picker_all_image">所有照片</string>
+    <string name="all_picture">所有图片</string>
+    <string name="picker_image_count">%1$d</string>
+    <item type="id" name="imageloader_uri"/>
 </resources>
