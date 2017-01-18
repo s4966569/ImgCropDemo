@@ -31,10 +31,6 @@ public class CapatureActivity extends Activity implements View.OnClickListener {
     Camera mCamera;
     CameraPreview mCameraPreview;
     Button btn_capture;
-    int mCameraState;
-    private static final int STATE_FROZEN = 0x01;
-    private static final int STATE_BUSY = 0x02;
-    private static final int STATE_PREVIEW = 0x03;
     int screentWidth, screentHeight;
     private String imagePath;
     DisplayMetrics dm;

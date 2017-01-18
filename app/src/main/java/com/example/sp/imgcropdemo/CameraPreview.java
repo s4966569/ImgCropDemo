@@ -70,7 +70,6 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
         Log.i("lifeCircle:","SurfaceCreated");
 
     }
-
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         if (mCamera == null)
@@ -93,8 +92,6 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
         if (mCamera == camera) {
             return;
         }
-
-        stopPreviewAndFreeCamera();
 
         mCamera = camera;
         if (mCamera != null) {
@@ -145,14 +142,6 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
                 break;
         }
         return super.onTouchEvent(event);
-    }
-
-    private void stopPreviewAndFreeCamera() {
-        if (mCamera != null) {
-            mCamera.stopPreview();
-            mCamera.release();
-            mCamera = null;
-        }
     }
 
 }
