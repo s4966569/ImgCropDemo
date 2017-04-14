@@ -2,15 +2,12 @@ package com.example.sp.imgcropdemo;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DecodeFormat;
-import com.example.sp.imgcropdemo.imageloader.ImageLoader;
 import com.example.sp.imgcropdemo.photoLoader.OnItemClickListener;
 import com.example.sp.imgcropdemo.photoLoader.Photo;
 
@@ -25,7 +22,6 @@ public class PhotoGridAdapter extends RecyclerView.Adapter<PhotoGridAdapter.Phot
     private List<Photo> photos;
     private LayoutInflater inflater;
     private OnItemClickListener onItemClickListener;
-    ImageLoader imageLoader;
     private int width;
     public boolean isRecyclerViewIdle = true;
 
@@ -33,7 +29,6 @@ public class PhotoGridAdapter extends RecyclerView.Adapter<PhotoGridAdapter.Phot
         this.mContext = context;
         this.photos = photos;
         inflater = LayoutInflater.from(context);
-        imageLoader = ImageLoader.build(context);
         width = context.getResources().getDisplayMetrics().widthPixels;
         width = width / 3;
     }

@@ -31,17 +31,13 @@ public class CapatureActivity extends Activity implements View.OnClickListener {
     Camera mCamera;
     CameraPreview mCameraPreview;
     Button btn_capture;
-    int mCameraState;
-    private static final int STATE_FROZEN = 0x01;
-    private static final int STATE_BUSY = 0x02;
-    private static final int STATE_PREVIEW = 0x03;
     int screentWidth, screentHeight;
-    private String imagePath;
     DisplayMetrics dm;
     private Bitmap mBitmap;
     public static Bitmap savedBitmap;
     OrientationEventListener orientationEventListener;
     private int backCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
+    private boolean isOrientationUnknown = true;  //拍照时是否能检测到手机的旋转角度（华为系列的手机安装APP之后会弹出是否允许读取运动权限的请求，如果禁用则读取不到旋转的角度）
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,25 +58,26 @@ public class CapatureActivity extends Activity implements View.OnClickListener {
             @Override
             public void onOrientationChanged(int orientation) {
 
-                if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN || mCamera == null) {
-                    return;  //手机平放时，检测不到有效的角度
-                }
+//                if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN || mCamera == null) {
+//                    isOrientationUnknown = true;
+//                    return;  //手机平放时或者读取运动权限被禁止，检测不到有效的角度
+//                }else{
+//                    isOrientationUnknown = false;
+//                }
                 android.hardware.Camera.CameraInfo info =
                         new android.hardware.Camera.CameraInfo();
-                android.hardware.Camera.getCameraInfo(backCameraId, info);
+                android.hardware.Camera.getCameraInfo(Camera.CameraInfo.CAMERA_FACING_BACK, info);
                 orientation = (orientation + 45) / 90 * 90;
-                int rotation = 0;
-                if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                    rotation = (info.orientation - orientation + 360) % 360;
-                } else {  // back-facing camera
-                    rotation = (info.orientation + orientation) % 360;
-                }
+                int rotation = info.orientation;
+//                if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+//                    rotation = (info.orientation - orientation + 360) % 360;
+//                } else {  // back-facing camera
+//                    rotation = (info.orientation + orientation) % 360;
+//                }
+                Log.i("ori",orientation+"");
                 Camera.Parameters parameters = mCamera.getParameters();
-                parameters.setRotation(rotation);
-//                parameters.set("rotation",rotation);
+                parameters.setRotation(90);
                 mCamera.setParameters(parameters);
-                Log.i("rotation ", "rotation:" + rotation);
-                Log.i("cameraOritation ", "cameraOritation:" + info.orientation);
             }
         };
 
@@ -126,12 +123,16 @@ public class CapatureActivity extends Activity implements View.OnClickListener {
         boolean qOpened = false;
         try {
             releaseCameraAndPreview();
-            mCamera = Camera.open(backCameraId);
+            mCamera = Camera.open();
             qOpened = (mCamera != null);
+            if(qOpened){
+                mCamera.getParameters();
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this,"打开摄像头失败",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"打开摄像头失败,请检查权限",Toast.LENGTH_SHORT).show();
             finish();
+            return false;
         }
         return qOpened;
     }
@@ -164,33 +165,6 @@ public class CapatureActivity extends Activity implements View.OnClickListener {
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, bmOptions);
         return bitmap;
     }
-
-
-    private File writeBitmapToFile(Bitmap bitmap, String filePath){
-        File file = new File(filePath);
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG,100,fos);
-            fos.flush();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }catch (IOException e){
-            e.printStackTrace();
-            return null;
-        }
-        finally {
-            try {
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-        return file;
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == MainActivity.REQUEST_CROP_PHOTO && resultCode == RESULT_OK){
@@ -247,32 +221,31 @@ public class CapatureActivity extends Activity implements View.OnClickListener {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-//            imagePath = file.getAbsolutePath();
-            //一般的手机，上面在orientationEventListener中，根据屏幕旋转的角度直接设置rotation就可以直接旋转图片 ，但是对于三星系列的手机，setRotation没有效果，但是这个rotation会
-            //写入到exif信息中。一般手机，不管在相机中调没调用params.setRotaion()，exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,ExifInterface.ORIENTATION_NORMAL)
-            //都会返回ExifInterface.ORIENTATION_UNDEFINED；三星的手机如果调用了会返回实际设置的rotation（横屏拍照也会返回ExifInterface.ORIENTATION_NORMAL），没调用的话，会返回ExifInterface.ORIENTATION_NORMAL（非设置的默认值）
-            if(orientation != ExifInterface.ORIENTATION_UNDEFINED && orientation != ExifInterface.ORIENTATION_NORMAL){
+                //一般的手机，上面在orientationEventListener中，根据屏幕旋转的角度直接设置rotation就可以直接旋转图片 ，但是对于三星系列的手机，setRotation没有效果，但是这个rotation会
+                //写入到exif信息中。
+                // 一般手机，不管在相机中调没调用params.setRotaion()，exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,ExifInterface.ORIENTATION_NORMAL)
+                //都会返回ExifInterface.ORIENTATION_UNDEFINED；而三星的手机如果调用了会返回实际设置的rotation（横屏拍照返回ExifInterface.ORIENTATION_NORMAL），没调用的话，会返回ExifInterface.ORIENTATION_NORMAL（非设置的默认值）
+                //下面主要分为两种情况处理：
+                //第一种情况是拍照的时候有旋转角度但是生成的照片并没有旋转（主要针对三星系列手机）；第二种情况为拍摄的时候检测不到旋转角度（手机平放或者读取运动数据权限被禁止）
+//                if(orientation != ExifInterface.ORIENTATION_UNDEFINED && orientation != ExifInterface.ORIENTATION_NORMAL){
+////                if(isOrientationUnknown){
+////                    //如果在上面的OrientationEventListener中检测不到旋转角度的话，所有的照片默认旋转90度。
+////                    orientation = 90;
+////                }
+//                Matrix matrix = new Matrix();
+//                matrix.setRotate(orientation);
+//                Bitmap bmpTemp = Bitmap.createBitmap(mBitmap,0,0, mBitmap.getWidth(), mBitmap.getHeight(),matrix,true);
+//                mBitmap = bmpTemp;
+//            }
+            if(mBitmap.getWidth() > mBitmap.getHeight()){
                 Matrix matrix = new Matrix();
-                matrix.setRotate(orientation);
-                Bitmap bmpTemp = Bitmap.createBitmap(mBitmap,0,0, mBitmap.getWidth(), mBitmap.getHeight(),matrix,true);
-                mBitmap = bmpTemp;
-//                File bmpFile = null;
-//                try {
-//                    bmpFile = FileUtils.createImageFile();
-//                    writeBitmapToFile(mBitmap,bmpFile.getAbsolutePath());
-//                    imagePath = bmpFile.getAbsolutePath();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
+                matrix.setRotate(90);
+                Bitmap bmpTemp1 = Bitmap.createBitmap(mBitmap,0,0, mBitmap.getWidth(), mBitmap.getHeight(),matrix,true);
+                mBitmap = bmpTemp1;
             }
             savedBitmap = mBitmap;
-//                Intent intent = new Intent();
-//                intent.putExtra("data",imagePath);
-//                setResult(RESULT_OK,intent);
             Intent imageCropIntent = new Intent(CapatureActivity.this,ImageCropActivity.class);
             startActivityForResult(imageCropIntent,MainActivity.REQUEST_CROP_PHOTO);
-//                setResult(RESULT_OK);
-//                finish();
         }
     }
     private int getBackCameraId(){
