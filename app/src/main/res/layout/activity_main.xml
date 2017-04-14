@@ -24,4 +24,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <Button
+            android:id="@+id/btn1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="11111"/>
+
+        <Button
+            android:id="@+id/btn2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="22222"
+            android:layout_alignParentRight="true"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/btn1"
+            android:layout_toLeftOf="@id/btn2"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="2342343243243243243243243243243242343222222222222222222222222222222222222222222"
+            android:ellipsize="end"
+            android:maxLines="1"/>
+
+    </RelativeLayout>
 </LinearLayout>

@@ -24,11 +24,6 @@ public class BitmapWorkerTask extends AsyncTask<String,Integer,Bitmap> {
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(imagePath,bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        if(photoW > photoH)
-            targetH = targetH /2;
 
         int scaleFactor = Utils.calculateInSampleSize(bmOptions,targetW,targetH);
         bmOptions.inJustDecodeBounds = false;
